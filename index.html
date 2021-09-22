@@ -4,8 +4,9 @@
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta name="description" content="Musician, composer, producer and coder for indie games and short film.">
 
-		<title>dundass</title>
+		<title>dundass | music and audio</title>
 
 		<link href="https://fonts.googleapis.com/css?family=Ubuntu" rel="stylesheet">
 		<link rel="stylesheet" type="text/css" href="css/vuepages.css">
@@ -36,33 +37,65 @@
 	})
 	
 	Vue.component('homepage', {
-		props: ['title', 'headerimage', 'mailto', 'contactblurb', 'sections'],
+		props: ['title', 'subtitle', 'headerimage', 'mailto', 'contactblurb', 'sections'],
 		data: function() { return {} },
 		methods: {},
 		template: 
 			'\
 			<div class="container">\
 			\
-			  <div class="header">\
+			  <div class="header" v-if="headerimage || title || subtitle">\
 				<div class="image-container" v-show="headerimage">\
-					<img class="header-image" v-bind:src="headerimage" id="headerImage">\
+					<img class="header-image" :src="headerimage" id="headerImage">\
 				</div>\
-				<h1>{{ title }}</h1>\
+				<h1 v-if="title && title.length">{{ title }}</h1>\
+				<p v-if="subtitle && subtitle.length">{{ subtitle }}</p>\
 			  </div>\
 			  \
 			  <div class="main">\
-				<page-section v-for="section in sections" v-bind:title="section.title" v-bind:paragraphs="section.paragraphs">{{section.slot ? section.slot : \'\'}}</page-section>\
+				<page-section v-for="(section, idx) in sections" :title="section.title" :paragraphs="section.paragraphs">{{ section.slot ? section.slot : \'\' }}</page-section>\
 				<slot></slot>\
-				<page-section v-bind:title="\'contact\'">\
-				  <p>{{contactblurb}}</p>\
+				<page-section :title="\'contact\'">\
+				  <p>{{ contactblurb }}</p>\
 				  <p>\
-					<a v-bind:href="mailto">\
-					{{mailto}}\
+					<a :href="mailto">\
+					{{ mailto }}\
 					</a>\
 				  </p>\
 				</page-section>\
 			  </div>\
 			  \
+			</div>'
+	});
+	
+	Vue.component('tabbed-view', {
+		props: ['tabs'],
+		data: function() { 
+			return {
+				activeTabIdx: 0
+			} 
+		},
+		methods: {
+			changeTab: function (idx) {
+				this.activeTabIdx = idx;
+				window.scrollTo(0, 0);
+			}
+		},
+		template:
+			'\
+			<div class="tabs-container">\
+				<div class="tabs">\
+					<div class="tab" v-for="(tab, idx) in tabs" v-on:click="changeTab(idx)" :class="{ \'active-tab\': activeTabIdx === idx }"><span>{{ tab.title }}</span></div>\
+				</div>\
+				<div class="active-tab-content">\
+					<slot name="tab-backing"></slot>\
+					<div v-show="activeTabIdx === 0"><slot name="tab-1"></slot></div>\
+					<div v-show="activeTabIdx === 1"><slot name="tab-2"></slot></div>\
+					<div v-show="activeTabIdx === 2"><slot name="tab-3"></slot></div>\
+					<div v-show="activeTabIdx === 3"><slot name="tab-4"></slot></div>\
+					<div v-show="activeTabIdx === 4"><slot name="tab-5"></slot></div>\
+					<div v-show="activeTabIdx === 5"><slot name="tab-6"></slot></div>\
+				</div>\
 			</div>'
 	});
 
@@ -71,23 +104,38 @@
 		
 		<script>
 		
+		// composer and digital artist emerging from various conduits in yorkshire, uk
+		
 			function init() {
 				
 				app = new Vue({
 					el: '#wrapper',
 					data: {
-						sections: [
-							{ title: 'hello', paragraphs: ['i make music and visuals, by hand and by machine', 
-														   'get in touch if you\'re after audible or visual treats'] },
-							{ title: 'audio', paragraphs: ['i can record, produce and mix your music, create remixes, or play live with <a href="https://typeensemble.wordpress.com/">TYPE</a>, <a href="https://www.facebook.com/LoEginBrassSabbath/">Lo Egin</a>, <a href="https://dundass.github.io/kvlt.html">TYKE</a> or solo', 
-														   'i also put out mostly slow music on the <a href="https://www.dontdronealone.com">don\'t drone alone</a> label with <a href="https://twitter.com/thanksbobs/">robin</a>',
-														   'if you, or anyone you know, want a soundtrack for your game or short film, i\'d be very interested !'] },
-							{ title: 'visual', paragraphs: ['i provide live projections for musical events and performances using custom software and the live code environment <a href="https://github.com/ojack/hydra">hydra</a>, and can create <a href="https://www.youtube.com/watch?v=zvzvEddZ3_I">music videos</a> using the same processes'] },
-							{ title: 'code', paragraphs: ['i write javascript (Vue.js, Three.js, Phaser), (S)CSS, html, java, and arduino, mostly for creative applications and web games', 
-														  'i can make websites such as this one and the <a href="https://www.dontdronealone.com">don\'t drone alone</a> page', 
-														  'for livecoding music, i use <a href="http://foxdot.org/">FoxDot</a> with <a href="https://github.com/Qirky/Troop/">Troop</a> to play with my friends'] }
+						soundsSections: [
+							{ title: 'soundtracks', paragraphs: ['aspiring composer creating game and short film soundtracks', 'enjoy the examples below, and get in touch if you would like me to score your game or film', '<iframe width="100%" height="300" scrolling="no" frameborder="no" allow="autoplay" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/playlists/1071456238&color=%23ff5500&auto_play=false&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true&visual=true"></iframe><div style="font-size: 10px; color: #cccccc;line-break: anywhere;word-break: normal;overflow: hidden;white-space: nowrap;text-overflow: ellipsis; font-family: Interstate,Lucida Grande,Lucida Sans Unicode,Lucida Sans,Garuda,Verdana,Tahoma,sans-serif;font-weight: 100;"><a href="https://soundcloud.com/dundasz" title="dundass" target="_blank" style="color: #cccccc; text-decoration: none;">dundass</a> · <a href="https://soundcloud.com/dundasz/sets/soundtracks" title="soundtracks" target="_blank" style="color: #cccccc; text-decoration: none;">soundtracks</a></div>'] },
+							{ title: 'remixes', paragraphs: ['breaking and remaking sound shows you one of an infinite possible versions. check out my versions below',
+														   '<iframe width="100%" height="300" scrolling="no" frameborder="no" allow="autoplay" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/playlists/1071421123&color=%23ff5500&auto_play=false&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true&visual=true"></iframe><div style="font-size: 10px; color: #cccccc;line-break: anywhere;word-break: normal;overflow: hidden;white-space: nowrap;text-overflow: ellipsis; font-family: Interstate,Lucida Grande,Lucida Sans Unicode,Lucida Sans,Garuda,Verdana,Tahoma,sans-serif;font-weight: 100;"><a href="https://soundcloud.com/dundasz" title="dundass" target="_blank" style="color: #cccccc; text-decoration: none;">dundass</a> · <a href="https://soundcloud.com/dundasz/sets/remixes" title="remixes" target="_blank" style="color: #cccccc; text-decoration: none;">remixes</a></div>'] },
+							{ title: 'performance', paragraphs: ['writing code to make music live with algorave confusers <a href="https://typeensemble.wordpress.com/">TYPE</a> and evil hackers <a href="https://infernalsheffield.github.io/trveyorkshirekvltensemble/">TYKE</a>', 
+																 'playing the rock music with the doom horns of <a href="https://loegin.bandcamp.com/">lo egin</a>'] },
 						],
-						contactBlurb: 'please reach out if you\'re interested in collaboration or bookings'
+						codeSections: [
+							{ title: 'web', paragraphs: ['i write javascript (vue.js, phaser, vanilla), (S)CSS and html, and can use these to create web games, webaudio/webmidi apps and sites such as this one and the <a href="https://www.dontdronealone.com">don\'t drone alone</a> page'] },
+							{ title: 'livecode', paragraphs: ['for livecoding music, i use <a href="http://foxdot.org/">FoxDot</a> with <a href="https://github.com/Qirky/Troop/">Troop</a> to play with my friends <a href="https://typeensemble.wordpress.com/">TYPE</a> and <a href="https://infernalsheffield.github.io/trveyorkshirekvltensemble/">TYKE</a>', 
+															  'i can also livecode <a href="https://www.youtube.com/watch?v=zvzvEddZ3_I">visuals</a> using p5.js and hydra'] },
+							{ title: 'unity', paragraphs: ['i am confident with C# and Unity, and can apply this to game dev and game design', 
+																	'i also feel quite at home writing dialogue and worldbuilding, creating new worlds with diversity in mind' ] },
+							{ title: 'research', paragraphs: ['MA by research graduate in computer music', 'research areas: generative music and mapping strategies, ethics and cultural impact of AI, audience perception of performative technology, chaotic dynamics, and shipwrecks'] }
+						],
+						groupsSections: [
+							{ title: 'groups', paragraphs: ['<a href="https://typeensemble.wordpress.com/">TYPE</a> - livecoded technoish music', 
+															'<a href="https://infernalsheffield.github.io/trveyorkshirekvltensemble/">TYKE</a> - livecoded hellscapes', 
+															'<a href="https://loegin.bandcamp.com/">lo egin</a> - brassy doom skronk'] },
+							{ title: 'label', paragraphs: ['<a href="https://dontdronealone.bandcamp.com/">don\'t drone alone</a> - fostering a community of loud monoliths, one tape at a time', 
+														   'we put out most music with or without a structure. get in touch if u have some music to submit !'] },
+							{ title: 'other circles', paragraphs: ['<a href="https://toplap.org/about">TOPLAP</a> - homepage for the global livecode movement', 
+																   '<a href="https://electronicallyclube.wordpress.com/">electronically clube</a> - a Sheffield-based monthly electronic tinkering hosted at Infernal, our studio space'] }
+						],
+						contactBlurb: 'please reach out if you\'re interested in commission, collaboration or bookings'
 					},
 					methods: {},
 					mounted: function () {
@@ -103,8 +151,21 @@
 	<body onload="init()">
 	
 		<div id="wrapper" style="z-index: -999">
+		
 			
-			<homepage v-bind:title="'dundass'" v-bind:mailto="'lauriej1316@gmail.com'" v-bind:sections="sections" v-bind:contactblurb="contactBlurb"></homepage>
+		
+			<tabbed-view :tabs="[ {title: 'tones'}, {title: 'text'}, {title: 'circles'} ]">
+				<template v-slot:tab-1>
+					<!--<div class="header-image"></div>-->
+					<homepage :title="'dundass'" :subtitle="'writes music and text'" :mailto="'lauriej1316@gmail.com'" :sections="soundsSections" :contactblurb="contactBlurb"></homepage>
+				</template>
+				<template v-slot:tab-2>
+					<homepage :title="'dundass'" :subtitle="'writes text and music'" :mailto="'lauriej1316@gmail.com'" :sections="codeSections" :contactblurb="contactBlurb"></homepage>
+				</template>
+				<template v-slot:tab-3>
+					<homepage :mailto="'lauriej1316@gmail.com'" :sections="groupsSections" :contactblurb="contactBlurb"></homepage>
+				</template>
+			</tabbed-view>
 			
 		</div>
 		
